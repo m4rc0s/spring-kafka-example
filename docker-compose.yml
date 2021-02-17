@@ -1,0 +1,25 @@
+version: "3"
+services:
+  kafka:
+    image: spotify/kafka
+  company-service:
+    build:
+      context: company-service/
+    ports:
+      - 8080:8080
+    depends_on:
+      - kafka
+    environment:
+      kafka.host: kafka
+      kafka.port: 9092
+  accountancy-service:
+    build:
+      context: accountancy-service/
+    ports:
+      - 8080:8282
+    depends_on:
+      - kafka
+      - company-service
+    environment:
+      kafka.host: kafka
+      kafka.port: 9092
